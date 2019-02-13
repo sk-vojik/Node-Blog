@@ -27,6 +27,21 @@ router.get('/', async (req, res) => {
   }
 });
 
+//GET POSTS BY USER
+
+router.get('/posts/:id', async (req, res) => {
+  try {
+    const posts = await Users.getUserPosts(req.params.id);
+    if (posts) {
+      return res.status(200).json({ success: true, posts })
+    } else {
+      res.status(404).json({ success: false, error: "This user with the specified ID does not exist."})
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: "We could not retrieve posts at this time."})
+  }
+});
+
 
 //GET USER BY ID
 
@@ -42,6 +57,8 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ success: false, error: "The user could not be retrieved at this time."})
   }
 });
+
+
 
 
 //POST (create user)

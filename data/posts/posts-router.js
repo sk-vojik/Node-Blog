@@ -64,7 +64,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 
-//EDIT
+//PUT (edit)
 
 router.put('/:id', async (req, res) => {
   if (!req.body.text) {
