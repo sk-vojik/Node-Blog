@@ -59,4 +59,22 @@ router.post('/', capitalize, async (req, res) => {
 });
 
 
+//PUT(edit)
+
+router.put('/:id', capitalize, async (req, res) => {
+  if(!req.body.name) {
+    return res.status(400).json({ success: false, error: "Please provide a name you'd like to update with."})
+  }
+  try {
+    const edited = await Users.update(req.params.id, req.body)
+    if (edited) {
+      return res.status(200).json({ success: true, edited})
+    } else {
+      return res.status(404).json({ success: false, error: "The user with the specified ID could not be found."})
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: "We could not update the user at this time."})
+  }
+});
+
 module.exports = router;
