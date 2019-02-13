@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
     })
 });
 
-//GET BY ID
+//GET POST BY ID
 
 router.get('/:id', (req, res) => {
   Posts.getById(req.params.id)
@@ -63,6 +63,24 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+
+//EDIT
+
+router.put('/:id', async (req, res) => {
+  if (!req.body.text) {
+    return res.status(400).json({ success: false, error: "Please provide text to update the post with."})
+  }
+  try {
+    const edited = await Posts.update(req.params.id, req.body);
+    if (edited) {
+      return res.status(200).json({ success: true, edited})
+    } else {
+      res.status(404).json({ success: false, error: "The post with the specified ID could not be found."})
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: "We could not update the post at this time."})
+  }
+});
 
 
 

@@ -4,6 +4,14 @@ const Users = require('../../data/helpers/userDb');
 
 const router = express.Router();
 
+
+//capitalize middleware
+function capitalize(req, res, next) {
+  req.body.name = req.body.name.toUpperCase();
+  next();
+}
+
+
 //GET ALL USERS
 
 router.get('/', async (req, res) => {
@@ -35,6 +43,20 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+
+//POST (create user)
+
+router.post('/', capitalize, async (req, res) => {
+  if(!req.body.name) {
+    return res.status(400).json({ success: false, error: "Please provide a name for the user"})
+  } 
+  try {
+    const user = await Users.insert(req.body);
+    res.status(201).json({ success: true, user })
+  } catch (error) {
+    res.status(500).json({ success: false, error: "There was an error saving the user."})
+  }
+});
 
 
 module.exports = router;
